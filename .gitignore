@@ -1,0 +1,73 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+
+# Build artifacts
+dist/
+build/
+.coverage
+coverage.xml
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Data and model outputs
+data/processed/*
+!data/processed/.gitkeep
+data/raw/*
+!data/raw/.gitkeep
+data/interim/*
+!data/interim/.gitkeep
+artifacts/
+checkpoints/
+models/*
+!models/.gitkeep
+
+# Notebook checkpoints
+.ipynb_checkpoints/
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+# Scoped to the data and model trees on purpose. These were bare patterns
+# (*.png, *.tif, *.tiff, *.pth), and a bare pattern matches at EVERY depth --
+# which silently suppressed docs/source/_static/sample_plate.png, the image
+# cd.yml POSTs to /infer as its deploy smoke test, and both images embedded in
+# the quickstart tutorial. Keep these anchored so committing a legitimate
+# image under docs/ or apps/ does not require `git add -f`.
+data/**/*.png
+data/**/*.tif
+data/**/*.tiff
+models/**/*.pth
+checkpoints/**/*.pth
+*.pth
+
+PLAN.md
+auth_migration/
+
+# Airflow runtime artifacts
+infra/airflow/logs/
+infra/airflow/plugins/
+*.log
+
+# Debug artifacts / accidental temp job dumps
+response.json
+tmp_*/
+
+
+# Build artifacts of packages/cv-pipeline. Regenerate with:
+#   uv build --package cv-pipeline --out-dir dist
+# then copy into infra/cloud/{endpoint,train_environment,training_jobs}/
+*.whl

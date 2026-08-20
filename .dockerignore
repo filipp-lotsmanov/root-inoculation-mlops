@@ -1,0 +1,33 @@
+.git
+.github
+.vscode
+.idea
+.venv
+
+**/__pycache__
+**/.pytest_cache
+**/.mypy_cache
+**/.ruff_cache
+
+.coverage
+coverage.xml
+
+*.pyc
+*.pyo
+*.pyd
+
+.env
+.env.*
+
+**/.ipynb_checkpoints
+
+# Host node_modules must never enter the context: the frontend Dockerfile runs
+# `npm ci` and then `COPY apps/frontend/ ./`, which would overwrite the freshly
+# installed tree with the host's -- possibly built for a different platform.
+#
+# The **/ prefix is required. Unlike .gitignore, .dockerignore does NOT apply a
+# bare pattern at every depth: `node_modules/` matches only a directory at the
+# context root, so apps/frontend/node_modules was still being uploaded (a
+# measured 523 MB build context).
+**/node_modules
+**/.next

@@ -1,0 +1,29 @@
+[project]
+name = "cv-backend"
+version = "0.1.0"
+description = "Backend API for CV pipeline"
+requires-python = ">=3.11"
+dependencies = [
+  # Capped: on 0.141+ include_router stops flattening routes into app.routes,
+    # so slowapi silently stops enforcing every limit. tests/test_rate_limit.py
+    # fails loudly if this cap is lifted before slowapi catches up.
+    "fastapi>=0.115.0,<0.141",
+  "uvicorn[standard]>=0.30.0",
+  "pydantic-settings>=2.5.0",
+  "python-multipart>=0.0.9",
+  "cv-pipeline",
+  "sqlalchemy>=2.0",
+  "alembic>=1.13",
+  "psycopg2-binary>=2.9",
+  "asyncpg>=0.29",
+  "bcrypt>=4.0",
+  "slowapi>=0.1.9",
+  "pyjwt[crypto]>=2.8",
+  "authlib>=1.3",
+  "itsdangerous>=2.1",
+  "httpx>=0.27",
+  "prometheus-fastapi-instrumentator>=8.0.0",
+]
+
+[tool.uv.sources]
+cv-pipeline = { workspace = true }
