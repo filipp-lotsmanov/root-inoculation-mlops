@@ -35,17 +35,15 @@ logger = logging.getLogger(__name__)
 
 @dataclass(frozen=True, slots=True)
 class WeightSpec:
-    """Where a checkpoint lives and what it should hash to.
+    """Where a checkpoint lives and what it should hash to."""
 
-    Attributes:
-        url: Direct download URL returning raw bytes.
-        sha256: Expected SHA-256 hex digest of the file. When set, a
-            downloaded file whose digest differs is deleted and the download
-            fails. ``None`` disables the check, which should only happen for
-            a version whose digest has not been recorded yet.
-    """
-
+    #: Direct download URL returning raw bytes.
     url: str
+
+    #: Expected SHA-256 hex digest of the file. When set, a downloaded file
+    #: whose digest differs is deleted and the download fails. ``None``
+    #: disables the check, which should only happen for a version whose
+    #: digest has not been recorded yet.
     sha256: str | None = None
 
 
@@ -56,18 +54,11 @@ class WeightSpec:
 # message - see _download below.
 REGISTRY: dict[str, WeightSpec | str] = {
     "unet-v1": WeightSpec(
-        # TODO: replace with a GitHub Release asset on this repository and fill
-        # in sha256 below. A personal file-share link is not a durable host:
-        # it expires with the account and cannot be integrity-checked.
         url=(
-            "https://edubuas-my.sharepoint.com/:u:/g/personal/"
-            "240247_buas_nl/"
-            "IQB2wvFuucF6QKxzhA_Se8i8ASonyPGioDLILJtH-sX066g"
-            "?download=1"
+            "https://github.com/filipp-lotsmanov/root-inoculation-mlops"
+            "/releases/download/weights-v1/unet-v1.pth"
         ),
-        # Fill in once the artifact is republished. Until then the download is
-        # unverified and get_weights() logs a warning on every cache miss.
-        sha256=None,
+        sha256="36908fab40c9388f6834cbd0a2278f2ad173cd1597d889cf477b6d31fc747f71",
     ),
 }
 
