@@ -447,11 +447,23 @@ jobs:
           IMAGE_PATH: ${{ matrix.image_path }}
           # Hard gate on the /infer smoke test. The backend reaches the model
           # through the public NGROK tunnel (MODEL_ENDPOINT_URL) with a Bearer
-          # key, so end-to-end inference IS verifiable in CI. "true" => a failing
+          # key, so the request path IS verifiable in CI. "true" => a failing
           # /infer rolls the deploy back. Set "false" only as a temporary escape
           # hatch when the tunnel is known-down and you must ship other changes;
           # a persistently "false" value gives false confidence, since the
           # inference step would pass regardless of whether NGROK is reachable.
+          #
+          # SCOPE: this asserts HTTP 200 plus a well-formed result body -- the
+          # request path, auth, model load and serialisation. It deliberately
+          # does NOT assert landmark_count > 0, because the only image this repo
+          # may redistribute (docs/source/_static/sample_plate.png) is a
+          # web-downscaled copy of a proprietary plate, and unet-v1 is
+          # scale-sensitive: it correctly returns an empty mask at that
+          # resolution. See the "Why the sample returns an empty mask" section
+          # of docs/source/tutorials/quickstart.md. Asserting a non-zero
+          # landmark count here would fail every deploy. To gate on real
+          # segmentation quality, add a native-resolution fixture that is
+          # licensed for redistribution, then tighten the grep below.
           INFER_SMOKE_FATAL: "true"
         run: |
           set -euo pipefail

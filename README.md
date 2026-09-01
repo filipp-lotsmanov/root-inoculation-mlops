@@ -106,6 +106,14 @@ root-tip landmarks with pixel coordinates, and confidence scores.
 Weights download on first run and cache under
 `~/.cache/cv-pipeline/models/`.
 
+Feed it plates at native acquisition resolution (~4202x3006). `unet-v1`
+is scale-sensitive and returns an empty mask on a downscaled plate — a
+measured limitation, quantified in
+[the quickstart](docs/source/tutorials/quickstart.md#why-the-sample-returns-an-empty-mask).
+The sample image in `docs/source/_static/` is a web-downscaled copy of a
+proprietary NPEC plate and therefore demonstrates the plumbing, not the
+segmentation quality.
+
 ### Training
 
 ```bash
