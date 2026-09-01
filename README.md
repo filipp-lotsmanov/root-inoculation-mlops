@@ -1,5 +1,11 @@
 # Root Inoculation MLOps
 
+[![CI](https://github.com/filipp-lotsmanov/root-inoculation-mlops/actions/workflows/ci.yml/badge.svg)](https://github.com/filipp-lotsmanov/root-inoculation-mlops/actions/workflows/ci.yml)
+[![Docs](https://github.com/filipp-lotsmanov/root-inoculation-mlops/actions/workflows/docs.yml/badge.svg)](https://filipp-lotsmanov.github.io/root-inoculation-mlops/)
+[![Coverage floor](https://img.shields.io/badge/coverage-85%25%20floor-brightgreen.svg)](.github/workflows/ci.yml)
+[![Python](https://img.shields.io/badge/python-3.11--3.13-blue.svg)](pyproject.toml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+
 End-to-end MLOps platform for plant organ segmentation and root-tip
 detection on *Arabidopsis thaliana* seedling images — trained, served,
 monitored, and retrained from user feedback.
@@ -137,7 +143,7 @@ promotion step decides whether it takes traffic. The most recent recorded run:
 | Registered as | `hades-unet` version 18 |
 | Best validation F1 | 0.8524 (epoch 28 of 43, early-stopped) |
 | **Held-out test F1** | **0.8371** (test IoU 0.7199, 20,512 patches) |
-| Data | 40,870 val / 20,512 test patch pairs; 58,646 train kept from 111,046 available |
+| Data | 40,870 val / 20,512 test patch pairs; 58,646 train patches balanced from 144,558 available |
 | Learning rate | 3.929e-4, chosen by the `hyperparameter_tuning` sweep |
 
 Quote the test F1, not the validation F1: the split is at source-image level
@@ -145,9 +151,9 @@ before patching, and empty-patch balancing is applied to the training set only,
 so validation and test keep the natural background-heavy distribution.
 
 The train figure above is post-balancing. Source images are split 70/20/10, but
-training then drops surplus background-only patches (33,512 root + 25,134 empty
-kept, ratio 0.75), so the raw patch counts read as a smaller train share than
-the image-level ratios suggest.
+training keeps only 0.75 empty patches per root patch (`empty_patch_ratio`),
+discarding 85,912 of the 111,046 available empty patches, so the raw patch
+counts read as a smaller train share than the image-level ratios suggest.
 
 The baseline checkpoint carries its own `val_f1` of 0.848, but it was measured
 on a different validation set with different hyperparameters and is **not
@@ -218,13 +224,14 @@ verification cost does not grow with user count. Details in the
 ## Testing
 
 ```bash
-uv run pytest                    # backend + cv-pipeline
+uv run pytest                    # cv-pipeline + backend + Airflow helpers
 uv run ruff check . && uv run ruff format --check .
 ```
 
-53 test files — 11 for `cv-pipeline`, 29 for the backend, 11 for the
-frontend, plus Airflow helper tests. CI enforces an 85% coverage floor
-on `cv_pipeline` and `api`; a PR cannot merge below it.
+475 Python tests across the `cv-pipeline` package, the backend, and the
+Airflow DAG helpers, plus 64 Vitest tests for the frontend. CI enforces an
+85% coverage floor on `cv_pipeline` and `api`; a PR cannot merge below it.
+The current figure is 92%.
 
 ## Deployment
 

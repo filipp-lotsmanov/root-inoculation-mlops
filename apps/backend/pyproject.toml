@@ -2,7 +2,7 @@
 name = "cv-backend"
 version = "0.1.0"
 description = "Backend API for CV pipeline"
-requires-python = ">=3.11"
+requires-python = ">=3.11,<3.14"
 dependencies = [
   # Capped: on 0.141+ include_router stops flattening routes into app.routes,
     # so slowapi silently stops enforcing every limit. tests/test_rate_limit.py

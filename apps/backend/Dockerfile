@@ -11,15 +11,23 @@ COPY pyproject.toml uv.lock ./
 COPY packages/cv-pipeline/pyproject.toml packages/cv-pipeline/pyproject.toml
 COPY apps/backend/pyproject.toml apps/backend/pyproject.toml
 
+# Cache mount keeps uv's wheel cache outside the layer, so editing any
+# pyproject.toml or uv.lock re-links from cache instead of re-downloading.
+# UV_LINK_MODE=copy: the mount is a separate filesystem from the layer, so
+# hardlinking into the venv is not possible.
+ENV UV_LINK_MODE=copy
+
 # Sync dependencies into a project-local venv. --no-install-project
 # means we install deps but not the packages themselves yet, so this
 # layer is cached independent of source changes.
-RUN uv sync --frozen --no-install-project --no-dev
+RUN --mount=type=cache,target=/root/.cache/uv \
+	uv sync --frozen --no-install-project --no-dev
 
 # Now copy the actual source and install the packages into the venv.
 COPY packages/cv-pipeline packages/cv-pipeline
 COPY apps/backend apps/backend
-RUN uv sync --frozen --no-dev
+RUN --mount=type=cache,target=/root/.cache/uv \
+	uv sync --frozen --no-dev
 
 # Stage 2: runtime image. We copy the venv from the builder so the
 # final image has no build tooling, which cuts size.

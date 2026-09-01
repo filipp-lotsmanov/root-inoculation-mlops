@@ -6,10 +6,13 @@ build-backend = "hatchling.build"
 name = "cv-pipeline"
 version = "0.1.0"
 description = "NPEC plant organ segmentation and root tip detection pipeline"
-requires-python = ">=3.11"
+requires-python = ">=3.11,<3.14"
 dependencies = [
-    "torch>=2.0.0",
-    "torchvision>=0.15.0",
+    # Bounded to the 2.6 / 0.21 line. The CUDA index publishes only 2.6.0+cu124,
+    # so an open upper bound lets non-CUDA platforms float to a newer torch and
+    # resolve a stack that CI never exercises.
+    "torch>=2.6.0,<2.7",
+    "torchvision>=0.21.0,<0.22",
     "segmentation-models-pytorch>=0.3.3",
     "opencv-python-headless>=4.8.0",
     "numpy>=1.24.0",

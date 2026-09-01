@@ -2,7 +2,7 @@
 name = "cv-platform-workspace"
 version = "0.1.0"
 description = "Monorepo for CV pipeline deployment across local, server, and cloud"
-requires-python = ">=3.11"
+requires-python = ">=3.11,<3.14"
 dependencies = [
     "cv-pipeline",
     "cv-backend",
@@ -13,8 +13,14 @@ dependencies = [
 [tool.uv.sources]
 cv-pipeline = { workspace = true }
 cv-backend = { workspace = true }
-torch = { index = "pytorch-cu124" }
-torchvision = { index = "pytorch-cu124" }
+# CUDA wheels are published for Linux and Windows only. Other platforms resolve
+# torch from PyPI, which serves the CPU/MPS build at the same version.
+torch = [
+  { index = "pytorch-cu124", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+]
+torchvision = [
+  { index = "pytorch-cu124", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+]
 
 [[tool.uv.index]]
 name = "pytorch-cu124"
@@ -66,6 +72,7 @@ quote-style = "double"
 testpaths = [
   "packages/cv-pipeline/tests",
   "apps/backend/tests",
+  "infra/airflow/tests",
 ]
 pythonpath = ["packages/cv-pipeline/src", "apps/backend/src"]
 markers = [
