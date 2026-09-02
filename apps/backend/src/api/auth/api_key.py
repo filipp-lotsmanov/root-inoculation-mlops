@@ -12,9 +12,9 @@ This module exposes two entry points:
 - ``lookup_user_by_api_key``: pure helper returning ``User | None``.
   Used by the new ``optional_user`` dependency, which needs to
   silently fall through to anonymous on a bad key.
-- ``require_api_key``: legacy FastAPI dependency that raises 401
-  / 503 on failure. Kept for backward compatibility with the
-  existing Streamlit frontend, CLI scripts, and unit tests.
+- ``require_api_key``: original FastAPI dependency that raises 401
+  / 503 on failure. Kept for the API-key-only callers: the CLI,
+  service accounts, the robotic platform, and unit tests.
 """
 
 from __future__ import annotations
@@ -92,8 +92,8 @@ async def require_api_key(
 ) -> User:
     """Legacy dependency: 401 on missing/bad key, 503 on empty table.
 
-    Kept intact for the Streamlit frontend, CLI scripts, and tests
-    that still rely on the X-API-Key-only flow. New routes should
+    Kept intact for the CLI, service accounts, and tests that rely
+    on the X-API-Key-only flow. New routes should
     prefer ``require_user`` from ``api.auth.dependencies``, which
     accepts both session cookies and X-API-Key.
 

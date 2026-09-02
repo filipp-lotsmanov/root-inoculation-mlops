@@ -30,6 +30,12 @@ sys.path.insert(0, str(_AIRFLOW / "smoke_code"))
 import promotion  # noqa: E402
 import smoke_eval  # noqa: E402
 
+# These are unit tests: pure helper logic, no Airflow runtime and no Azure SDK
+# (the DAG modules import azure-ai-ml lazily inside functions). The marker is
+# what puts them in CI's `pytest -m unit` selection -- without it the whole
+# file is silently deselected there.
+pytestmark = pytest.mark.unit
+
 
 def _model(version: str) -> MagicMock:
     """A stand-in registered-model object exposing only .version."""

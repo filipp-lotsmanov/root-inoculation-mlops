@@ -1,7 +1,8 @@
 /**
  * Canvas-based segmentation mask overlay.
  *
- * Replaces the PIL-based overlay from the old Streamlit frontend.
+ * Renders the overlay in the browser rather than server-side, so no
+ * round trip is needed to toggle or recolour it.
  * Decodes a base64-encoded grayscale mask and blends a semi-transparent
  * coloured overlay onto the original image using an offscreen canvas.
  *

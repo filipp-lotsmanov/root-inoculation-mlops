@@ -18,6 +18,12 @@ from unittest.mock import MagicMock
 import feedback_export as fx
 import pytest
 
+# These are unit tests: pure helper logic with injected DB/blob doubles, no
+# Airflow runtime and no Azure SDK. The marker is what puts them in CI's
+# `pytest -m unit` selection -- without it the whole file is silently
+# deselected there.
+pytestmark = pytest.mark.unit
+
 _PNG = b"\x89PNG\r\n\x1a\nMASKBYTES"
 _MASK_B64 = base64.b64encode(_PNG).decode()
 _URI = "azureml://datastores/workspaceblobstore/paths/feedback/raw/u/p.png"

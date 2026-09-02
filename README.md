@@ -237,9 +237,10 @@ uv run ruff check . && uv run ruff format --check .
 ```
 
 475 Python tests across the `cv-pipeline` package, the backend, and the
-Airflow DAG helpers, plus 64 Vitest tests for the frontend. CI enforces an
-85% coverage floor on `cv_pipeline` and `api`; a PR cannot merge below it.
-The current figure is 92%.
+Airflow DAG helpers, plus 64 Vitest tests for the frontend. CI runs all 475
+and enforces an 85% coverage floor over `cv_pipeline`, `api`, and the
+Airflow helpers (`promotion`, `feedback_export`); a PR cannot merge below it.
+The current figure is just above 90%.
 
 ## Deployment
 

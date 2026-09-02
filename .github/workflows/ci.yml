@@ -45,9 +45,15 @@ jobs:
           cache-dependency-glob: "uv.lock"
       - run: uv sync --frozen
       - run: |
+          # promotion and feedback_export are the Airflow DAG helper modules.
+          # They are measured by import name, not path, because the DAG files
+          # import their siblings flatly and infra/airflow/tests/conftest.py
+          # replicates that by putting dags/ on sys.path at collection time.
           uv run pytest \
             --cov=cv_pipeline \
             --cov=api \
+            --cov=promotion \
+            --cov=feedback_export \
             --cov-report=xml \
             --cov-report=term-missing \
             --cov-fail-under=85 \

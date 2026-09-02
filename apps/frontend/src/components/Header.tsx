@@ -31,9 +31,13 @@ export default function Header({ active }: HeaderProps) {
 
   // Full-page navigation (not router.replace) is intentional: it clears
   // all in-memory React state and any polling timers, giving the next
-  // user a clean session.
+  // user a clean session. next/no-location-assign-relative-destination
+  // flags this as a missed client-side navigation, which is exactly the
+  // behaviour we do not want on logout, so the rule is disabled here
+  // rather than the code changed to satisfy it.
   async function handleLogout() {
     await logout();
+    // eslint-disable-next-line @next/next/no-location-assign-relative-destination
     window.location.href = "/login";
   }
 

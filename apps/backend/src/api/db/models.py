@@ -5,9 +5,9 @@ and sessions. Users must be defined before Prediction, Feedback, and
 Session because all three reference users.id via FK.
 
 User has two parallel auth paths that intentionally coexist:
-- api_key_hash + key_sha256: legacy / service-account flow (CLI,
-  Streamlit, robotic platform). Bound to seed.py + POST /users.
-- email + password_hash: new human-web flow. Bound to POST
+- api_key_hash + key_sha256: service-account flow (CLI, robotic
+  platform). Bound to seed.py + POST /users.
+- email + password_hash: human-web flow. Bound to POST
   /auth/register and POST /auth/login.
 
 A CHECK constraint guarantees every row has at least one path. The
